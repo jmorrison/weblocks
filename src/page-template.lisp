@@ -92,7 +92,7 @@ page HTML (title, stylesheets, etc.).  Can be overridden by subclasses"))
     (when description
       (htm (:meta :name "description" :content description)))
     (when keywords
-      (htm (:meta :name "keywords" :content (format nil "~{~A~^,~}" it))))
+      (htm (:meta :name "keywords" :content (format nil "~{~A~^,~}" keywords))))
     (str content)))
 
 (deftemplate :page-headers-wt 'page-headers-wt)
@@ -104,6 +104,7 @@ page HTML (title, stylesheets, etc.).  Can be overridden by subclasses"))
    here to customize header rendering on a per-request basis.  By default
    this function renders the current content type."
   (declare (special *current-page-headers*))
+  #-NIL (pushnew (with-html-to-string (:base :href "/")) *current-page-headers*)
   (render-wt :page-headers-wt 
              (list :app app)
              :content-type *default-content-type*
